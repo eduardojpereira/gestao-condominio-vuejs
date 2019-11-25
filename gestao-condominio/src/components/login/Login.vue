@@ -19,7 +19,7 @@
                   </v-toolbar>
                   <v-card-text>
                     <v-form>
-                      <v-text-field label="CPF/email" name="login" type="text"></v-text-field>
+                      <v-text-field label="CPF" name="login" type="text"></v-text-field>
                       <v-text-field id="password" label="Senha" name="password" type="password"></v-text-field>
                     </v-form>
                   </v-card-text>
