@@ -20,9 +20,27 @@
                   <v-card-text>
                     <v-form>
                       <v-text-field label="consumo" name="consumo" type="text"></v-text-field>
-                      <v-combobox  :items="condominios" label="Condominio"></v-combobox>
-                      <v-combobox  :items="blocos" label="blocos"></v-combobox>
-                      <v-combobox  :items="ap" label="ap"></v-combobox>
+                      <v-combobox
+                        v-model="selectedCondominio"
+                        item-value="id"
+                        item-text="nome"
+                        :items="condominios"
+                        label="Condominio"
+                      ></v-combobox>
+                      <v-combobox
+                        :items="blocos"
+                        label="blocos"
+                        v-model="selectedBloco"
+                        item-value="id"
+                        item-text="nome"
+                      ></v-combobox>
+                      <v-combobox
+                        :items="apartamentos"
+                        label="Apartamentos"
+                        v-model="selectedApartamento"
+                        item-value="id"
+                        item-text="numero"
+                      ></v-combobox>
                     </v-form>
                   </v-card-text>
                   <v-card-actions>
@@ -39,13 +57,31 @@
   </div>
 </template>
 <script>
+import Bloco from "../../services/blocos";
+import Apartamento from "../../services/apartamentos";
+import Condominio from "../../services/condominios";
+
 export default {
   data() {
     return {
-      condominios: ["Dom Jaime", "Aurora azul", "Atlântico Sul", "Leblon"],
-      blocos: ["bloco 1", "bloco 2", "bloco 3", "bloco 4"],
-      ap: ["101", "102", "103", "104"]
+      selectedBloco: null,
+      selectedApartamento: null,
+      selectedCondominio: null,
+      condominios: [],
+      blocos: [],
+      apartamentos: []
     };
+  },
+  mounted() {
+    Bloco.listar().then(resposta => {
+      this.blocos = resposta.data;
+    });
+    Condominio.listar().then(resposta => {
+      this.condominios = resposta.data;
+    });
+    Apartamento.listar().then(resposta => {
+      this.apartamentos = resposta.data;
+    });
   }
 };
 </script>
