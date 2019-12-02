@@ -19,9 +19,9 @@
                   </v-toolbar>
                   <v-card-text>
                     <v-form>
-                      <v-text-field label="consumo" name="consumo" type="text"></v-text-field>
+                      <v-text-field v-model="consumo.leitura" label="Leitura" name="consumo" type="number"></v-text-field>
+                      <v-text-field v-model="consumo.data_leitura" label="Data da Leitura" name="data" type="date"></v-text-field>
                       <v-combobox
-                        v-model="selectedCondominio"
                         item-value="id"
                         item-text="nome"
                         :items="condominios"
@@ -30,23 +30,22 @@
                       <v-combobox
                         :items="blocos"
                         label="blocos"
-                        v-model="selectedBloco"
                         item-value="id"
                         item-text="nome"
                       ></v-combobox>
                       <v-combobox
                         :items="apartamentos"
                         label="Apartamentos"
-                        v-model="selectedApartamento"
+                        v-model="consumo.apartamento"
                         item-value="id"
                         item-text="numero"
                       ></v-combobox>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn @click="salvar" color="primary">Registrar</v-btn>
+                      </v-card-actions>
                     </v-form>
                   </v-card-text>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="primary">Registrar</v-btn>
-                  </v-card-actions>
                 </v-card>
               </v-flex>
             </v-layout>
@@ -60,13 +59,17 @@
 import Bloco from "../../services/blocos";
 import Apartamento from "../../services/apartamentos";
 import Condominio from "../../services/condominios";
+import Consumo from "../../services/consumos";
 
 export default {
   data() {
     return {
-      selectedBloco: null,
-      selectedApartamento: null,
-      selectedCondominio: null,
+      consumo: {
+        leitura: null,
+        apartamento: null,
+        data_leitura: null,
+        leitor: 1
+      },
       condominios: [],
       blocos: [],
       apartamentos: []
@@ -82,6 +85,15 @@ export default {
     Apartamento.listar().then(resposta => {
       this.apartamentos = resposta.data;
     });
+  },
+  methods: {
+    salvar() {
+      this.consumo.apartamento = this.consumo.apartamento.id
+      this.consumo.leitura = parseInt(this.consumo.leitura)
+      Consumo.salvar(this.consumo).then(resposta => {
+        alert(resposta.data.data)
+      })
+    }
   }
 };
 </script>
